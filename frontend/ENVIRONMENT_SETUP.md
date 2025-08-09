@@ -10,7 +10,7 @@ VITE_MARKETPLACE_PACKAGE_ID=0x7ae460902e9017c7c9a5c898443105435b7393fc5776ace61b
 VITE_MARKETPLACE_OBJECT_ID=0x...
 
 # Backend API Configuration (optional, defaults to localhost)
-VITE_APIURL=http://localhost:8000
+VITE_API_URL=http://localhost:8000
 
 # Pinata IPFS Configuration (for image/metadata uploads)
 VITE_PINATA_API_KEY=your_pinata_api_key
