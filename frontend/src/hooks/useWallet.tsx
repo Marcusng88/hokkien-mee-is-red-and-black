@@ -54,7 +54,7 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
 
 // API base URL
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 // Marketplace configuration - No longer need MARKETPLACE_ID as it's handled in marketplace-utils
 const MARKETPLACE_FEE_RATE = 0.025; // 2.5% marketplace fee

@@ -268,7 +268,7 @@ export async function notifyBackendNewNFT(nftData: {
   transactionDigest: string;
 }) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/api/nft/notify-minted`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/nft/notify-minted`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
