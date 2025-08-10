@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Highlight.js syntax highlighting for code blocks */
+@import 'highlight.js/styles/github-dark.css';
+
 /* Futuristic Cyberpunk Design System - All colors MUST be HSL */
 
 @layer base {
@@ -605,6 +608,60 @@
 
   .animate-snake-trail {
     animation: snake-trail 0.8s ease-out forwards;
+  }
+}
+
+/* Markdown content styling for chat messages */
+@layer components {
+  .markdown-content {
+    @apply text-sm leading-relaxed;
+  }
+
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4,
+  .markdown-content h5,
+  .markdown-content h6 {
+    @apply font-semibold;
+  }
+
+  .markdown-content p {
+    @apply mb-2 last:mb-0;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    @apply mb-2 pl-4;
+  }
+
+  .markdown-content li {
+    @apply mb-1;
+  }
+
+  .markdown-content code {
+    @apply font-mono text-xs;
+  }
+
+  .markdown-content pre {
+    @apply overflow-x-auto rounded-md;
+  }
+
+  .markdown-content blockquote {
+    @apply border-l-4 pl-3 italic;
+  }
+
+  .markdown-content table {
+    @apply w-full border-collapse;
+  }
+
+  .markdown-content th,
+  .markdown-content td {
+    @apply border px-2 py-1 text-left;
+  }
+
+  .markdown-content th {
+    @apply font-semibold;
   }
 }
 

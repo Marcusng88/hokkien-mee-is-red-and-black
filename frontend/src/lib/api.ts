@@ -897,3 +897,93 @@ export async function updateUserProfile(
 
   return response.json();
 }
+
+// Price Prediction Interfaces
+export interface PricePredictionRequest {
+  title: string;
+  description: string;
+  category: string;
+}
+
+export interface PricePredictionResponse {
+  success: boolean;
+  predicted_price?: number;
+  confidence_score: number;
+  currency: string;
+  factors?: {
+    title_keywords: string[];
+    description_length: number;
+    category_popularity: string;
+    quality_indicators: string[];
+  };
+  category?: string;
+  error?: string;
+  details?: string[];
+}
+
+export interface CategoriesResponse {
+  categories: string[];
+  total_count: number;
+}
+
+// Price Prediction API Functions
+export async function predictNFTPrice(request: PricePredictionRequest): Promise<PricePredictionResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/price/predict`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to predict NFT price');
+  }
+
+  return response.json();
+}
+
+export async function predictBatchNFTPrices(requests: PricePredictionRequest[]): Promise<PricePredictionResponse[]> {
+  const response = await fetch(`${API_BASE_URL}/api/price/predict-batch`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requests),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to predict NFT prices');
+  }
+
+  return response.json();
+}
+
+export async function getPricePredictionCategories(): Promise<CategoriesResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/price/categories`);
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to get price prediction categories');
+  }
+
+  return response.json();
+}
+
+export async function checkPricePredictionHealth(): Promise<{
+  status: string;
+  message: string;
+  model_loaded: boolean;
+  available_categories?: number;
+}> {
+  const response = await fetch(`${API_BASE_URL}/api/price/health`);
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to check price prediction health');
+  }
+
+  return response.json();
+}

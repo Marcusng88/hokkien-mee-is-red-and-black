@@ -15,6 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import { PACKAGE_ID, uploadToPinata, createIPFSUrl, notifyBackendNewNFT } from '@/lib/sui-utils';
 import { createNFT, confirmNFTMint } from '@/lib/api';
 import { useNavigate } from 'react-router-dom';
+import { useRealtimePricePrediction, formatPredictedPrice, formatConfidenceScore, getConfidenceLevel } from '@/hooks/usePricePrediction';
 
 interface FormData {
   title: string;
@@ -50,8 +51,23 @@ export default function CreateNft() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [txDigest, setTxDigest] = useState<string | null>(null);
   const [createdNftId, setCreatedNftId] = useState<string | null>(null);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Price prediction hook
+  const {
+    data: pricePrediction,
+    isLoading: isPredicting,
+    error: predictionError,
+    isDebouncing,
+    hasValidData
+  } = useRealtimePricePrediction(
+    formData.title,
+    formData.description,
+    formData.category,
+    true, // enabled
+    1500  // 1.5 second debounce
+  );
   const account = useCurrentAccount();
   const client = useSuiClient();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
@@ -765,6 +781,105 @@ export default function CreateNft() {
                         placeholder="0.00"
                         className="glass-panel bg-card/30 border-border/50 backdrop-blur-md"
                       />
+
+                      {/* AI Price Prediction */}
+                      <div className="glass-panel p-4 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 border border-blue-400/20">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="relative p-2 bg-gradient-to-br from-blue-500/20 via-indigo-500/20 to-purple-500/20 rounded-lg border border-blue-400/30">
+                            <Zap className="w-4 h-4 text-blue-400" />
+                          </div>
+                          <span className="text-sm font-semibold text-blue-400">AI Price Suggestion</span>
+                          {isDebouncing && (
+                            <div className="w-3 h-3 border border-blue-400/50 border-t-blue-400 rounded-full animate-spin" />
+                          )}
+                        </div>
+
+                        {!hasValidData ? (
+                          <p className="text-xs text-muted-foreground">
+                            Complete the title, description, and category to get AI price suggestions
+                          </p>
+                        ) : isPredicting ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 border border-blue-400/50 border-t-blue-400 rounded-full animate-spin" />
+                            <span className="text-sm text-muted-foreground">Analyzing market data...</span>
+                          </div>
+                        ) : predictionError ? (
+                          <div className="flex items-center gap-2 text-red-400">
+                            <AlertTriangle className="w-4 h-4" />
+                            <span className="text-sm">Unable to predict price</span>
+                          </div>
+                        ) : pricePrediction?.success ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-lg font-bold text-blue-400">
+                                  {formatPredictedPrice(pricePrediction.predicted_price, pricePrediction.currency)}
+                                </div>
+                                <div className="flex items-center gap-2 text-xs">
+                                  <span className="text-muted-foreground">Confidence:</span>
+                                  <span className={`font-medium ${getConfidenceLevel(pricePrediction.confidence_score).color}`}>
+                                    {formatConfidenceScore(pricePrediction.confidence_score)}
+                                  </span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {getConfidenceLevel(pricePrediction.confidence_score).level}
+                                  </Badge>
+                                </div>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setFormData(prev => ({
+                                  ...prev,
+                                  price: pricePrediction.predicted_price?.toString() || ''
+                                }))}
+                                className="text-xs hover:bg-blue-500/10 hover:border-blue-400/50"
+                              >
+                                Use Suggestion
+                              </Button>
+                            </div>
+
+                            {pricePrediction.factors && (
+                              <div className="space-y-2">
+                                {pricePrediction.factors.title_keywords.length > 0 && (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs text-muted-foreground">Value keywords:</span>
+                                    <div className="flex gap-1">
+                                      {pricePrediction.factors.title_keywords.map((keyword, index) => (
+                                        <Badge key={index} variant="secondary" className="text-xs">
+                                          {keyword}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                  <span>Category: {pricePrediction.factors.category_popularity} demand</span>
+                                  <span>Description: {pricePrediction.factors.description_length} chars</span>
+                                </div>
+
+                                {pricePrediction.factors.quality_indicators.length > 0 && (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs text-muted-foreground">Quality:</span>
+                                    <div className="flex gap-1">
+                                      {pricePrediction.factors.quality_indicators.map((indicator, index) => (
+                                        <Badge key={index} variant="outline" className="text-xs text-green-400 border-green-400/30">
+                                          ✓ {indicator}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-xs text-muted-foreground">
+                            No prediction available
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
 

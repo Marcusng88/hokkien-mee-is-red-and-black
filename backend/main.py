@@ -34,6 +34,7 @@ try:
     from api.nft import router as nft_router
     from api.listings import router as listings_router
     from api.transactions import router as transactions_router
+    from api.price_prediction import router as price_prediction_router
     from database.connection import create_tables
 except ImportError:
     # Fallback to absolute imports (when running from project root)
@@ -47,6 +48,7 @@ except ImportError:
     from backend.api.nft import router as nft_router
     from backend.api.listings import router as listings_router
     from backend.api.transactions import router as transactions_router
+    from backend.api.price_prediction import router as price_prediction_router
     from backend.database.connection import create_tables
 
 # Configure logging
@@ -153,6 +155,7 @@ if FastAPI:
     app.include_router(nft_router)
     app.include_router(listings_router)
     app.include_router(transactions_router)
+    app.include_router(price_prediction_router)
     
 else:
     app = None
