@@ -1,6 +1,8 @@
-![Your Project Logo](frontend/public/FraudGuard_Logo.png)
+<p align="center">
+  <img src="frontend/public/FraudGuard_Logo.png" alt="FraudGuard Logo" width="250">
+</p>
 
-# **FraudGuard**
+<h1 align="center"><b>FraudGuard</b></h1>
 
 ---
 
