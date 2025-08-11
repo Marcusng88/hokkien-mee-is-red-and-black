@@ -73,8 +73,9 @@ This is the user-facing window into the marketplace.
 | **Frontend** | **Vite & TypeScript** | To build a fast, user-friendly interface. Connects to the Sui network via wallet adapters (`@mysten/dapp-kit`) to read on-chain data and submit transactions. |
 | **Backend API** | **FastAPI (Python)** | To serve as the communication hub. The frontend might call it for cached data, but its main job is to run the AI agent logic. |
 | **AI Agent Logic**| **LangChain / LangGraph (Python)**| To structure the fraud detection flow. **LangGraph** is excellent for creating the stateful, multi-step agent that will: 1. See event, 2. Analyze, 3. Decide, 4. Act. |
+| **Multi-Agent Architecture** | **Custom Agents** | **FraudFlag Enforcement** — Verified fraudulent actors are flagged and restricted from future marketplace participation.<br>**RAG Agent** — Uses retrieval-augmented generation to reference a fraud knowledge base for context-aware detection.<br>**Reputation & Enforcement Agent** — Maintains a reputation ledger, applies penalties, and automates DAO decisions.<br>**Price Predictor Agent** — Runs statistical and ML-based price validation for marketplace listings. |
 | **Vector DB / Cache**| **Supabase (Postgres w/ pgvector)**| **This is crucial.** You need Supabase for: <br>1. **Vector Database**: Store image embeddings from NFTs and perform similarity searches for plagiarism detection. <br>2. **Cache**: Store wallet activity or other data to avoid spamming the Sui RPC endpoint. |
-<!-- | **Deployment** | **Vercel** (Frontend), **Render/Railway** (Backend)| For easy and fast deployment during the hackathon. | -->
+| **Deployment** | **Vercel** (Frontend), **Render/Railway** (Backend)| For easy and fast deployment during the hackathon. |
 
 ### **Why Supabase is needed:**
 Your AI agent can't scan the *entire blockchain* for every new image. Instead, when a new NFT is minted, the agent's process will be:
@@ -110,9 +111,7 @@ FraudGuard now uses **Google Gemini Pro Vision** for advanced AI-powered fraud d
 - **🔍 Advanced Image Analysis**: Gemini Pro Vision analyzes NFT images for fraud indicators
 - **📝 Smart Description Extraction**: Automatic detailed description generation for semantic analysis  
 - **🧠 AI Fraud Detection**: Detects plagiarism, AI-generation, template usage, and low-effort content
-- **🤖 Enhanced RAG AI agent**: Intelligently analyzes user queries and returns refined LLM responses by dynamically referencing either local documentation (for relevant on-chain/project data) or performing live web searches via the Tavily agent
-- **👂🏻 Reputation score AI agent**: Continuously evaluates user actions in real time to calculate dynamic reputation scores, automatically restricting or banning low-trust users to safeguard the marketplace ecosystem
-- **💻 Price predictor**: Uses machine learning to estimate the optimal minting price for an NFT based on its attributes, metadata, and market trends.
+- **🤖 Multi-Agents AI** — Includes an enhanced RAG agent for context-aware fraud detection, a reputation agent for dynamic trust scoring and enforcement, and a price predictor for ML-based NFT valuation.
 - **🔗 Vector Similarity Search**: 768-dimensional Google embeddings for precise duplicate detection
 - **⚡ Intelligent Workflow**: LangGraph orchestrates multi-step fraud analysis pipeline
 
