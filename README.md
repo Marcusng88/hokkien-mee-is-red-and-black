@@ -1,10 +1,21 @@
+![Your Project Logo](frontend/public/FraudGuard_Logo.png)
+
+# **FraudGuard**
+
+---
+
 # 📄 Product Requirements Document: FraudGuard
 
 ### **Vision & Mission** 💡
 
-**Vision:** To create the most trustworthy decentralized marketplace by empowering users and protecting creators with transparent, real-time, AI-driven fraud detection.
+> **Vision:** To create the most trustworthy decentralized marketplace by empowering users and protecting creators with transparent, real-time, AI-driven fraud detection.
 
-**Mission (for this Hackathon):** To build a functional MVP of an on-chain marketplace on the Sui network that integrates an AI agent to detect and flag potential plagiarism and suspicious on-chain behavior, making this information visible to users directly on the frontend.
+> **Mission (for this Hackathon):** To build a functional MVP of an on-chain marketplace on the Sui network that integrates an AI agent to detect and flag potential plagiarism and suspicious on-chain behavior, making this information visible to users directly on the frontend.
+
+---
+
+## Hackathon Recognition
+🏆 **Champion: Best On-chain Marketplace Application __(SUI sponsored)__ — DEVMatch Blockchain Hackathon 2025 (APUBCC)**  
 
 ---
 
@@ -33,7 +44,17 @@ This is the "brain" that monitors and acts on suspicious activity using advanced
 * **User Story (Behavioral AI):** As the agent, I will monitor on-chain events for simple red flags, such as a single wallet minting an unusually high number of NFTs in a short period.
 * **User Story (Enforcement):** As the agent, if I detect a high probability of fraud (either visual or behavioral), I will automatically sign and submit a transaction to the Sui network to flag the corresponding NFT object.
 
-### **3. Marketplace Frontend (Vite with React)****
+### 3. Multi-Agent Architecture
+- **FraudFlag Enforcement** — Verified fraudulent actors are flagged and restricted from future marketplace participation.
+- **RAG Agent** — Uses retrieval-augmented generation to reference a fraud knowledge base for context-aware detection.
+- **Reputation & Enforcement Agent** — Maintains a reputation ledger, applies penalties, and automates DAO decisions.
+- **Price Predictor Agent** — Runs statistical and ML-based price validation for marketplace listings.
+
+### 4. Security Layer — Warlus & Seal Integration
+- **Warlus** — High-performance cryptographic proofs for fraud verification without revealing sensitive data.
+- **Seal** — Privacy-preserving computations for fraud detection.
+
+### **5. Marketplace Frontend (Vite with React)****
 This is the user-facing window into the marketplace.
 
 * **User Story:** As a user, I can browse all NFTs listed on the marketplace.
@@ -83,9 +104,13 @@ npm run dev
 FraudGuard now uses **Google Gemini Pro Vision** for advanced AI-powered fraud detection:
 
 ### Key Features:
+- **🔒 Slush**: Utilizes zkLogin to enable secure, passwordless authentication using existing Web2 identities, ensuring user privacy while seamlessly integrating with the decentralized marketplace
 - **🔍 Advanced Image Analysis**: Gemini Pro Vision analyzes NFT images for fraud indicators
 - **📝 Smart Description Extraction**: Automatic detailed description generation for semantic analysis  
 - **🧠 AI Fraud Detection**: Detects plagiarism, AI-generation, template usage, and low-effort content
+- **🤖 Enhanced RAG AI agent**: Intelligently analyzes user queries and returns refined LLM responses by dynamically referencing either local documentation (for relevant on-chain/project data) or performing live web searches via the Tavily agent
+- **👂🏻 Reputation score AI agent**: Continuously evaluates user actions in real time to calculate dynamic reputation scores, automatically restricting or banning low-trust users to safeguard the marketplace ecosystem
+- **💻 Price predictor**: Uses machine learning to estimate the optimal minting price for an NFT based on its attributes, metadata, and market trends.
 - **🔗 Vector Similarity Search**: 768-dimensional Google embeddings for precise duplicate detection
 - **⚡ Intelligent Workflow**: LangGraph orchestrates multi-step fraud analysis pipeline
 
